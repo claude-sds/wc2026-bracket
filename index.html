@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Cup 2026 — Updated Projected Bracket</title>
+<style>
+  :root{
+    --bg:#0b1220; --panel:#121c30; --line:#27374f; --ink:#e8eef7; --muted:#8aa0bd;
+    --fra:#2b5fb0; --fra-soft:#16263f; --arg:#56b6d8; --arg-soft:#10303c;
+    --win:#9fe6a0; --gold:#e8c45a; --card:#16223a; --danger:#e57b7b;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:radial-gradient(1200px 600px at 30% -10%, #14243f 0%, var(--bg) 60%);
+    color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  header{padding:22px 26px 8px;}
+  h1{margin:0 0 4px;font-size:26px;letter-spacing:.3px;}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:10px;max-width:1120px;line-height:1.45;}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:8px 0 10px;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .chip{width:13px;height:13px;border-radius:3px;display:inline-block;}
+  .chip.fra{background:var(--fra);} .chip.arg{background:var(--arg);} .chip.win{background:var(--win);} .chip.live{background:var(--gold);} .chip.pending{background:var(--danger);}
+
+  .updates{display:grid;grid-template-columns:minmax(280px,1.15fr) minmax(260px,.85fr);gap:14px;padding:0 26px 8px;max-width:1240px;}
+  .box{background:rgba(18,28,48,.86);border:1px solid var(--line);border-radius:12px;padding:12px 14px;box-shadow:0 1px 0 rgba(0,0,0,.24);}
+  .box h3{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:1.1px;color:var(--muted);}
+  .results{display:grid;grid-template-columns:repeat(2,minmax(200px,1fr));gap:6px 12px;font-size:12.5px;}
+  .result{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dotted rgba(138,160,189,.25);padding-bottom:4px;}
+  .result .date{color:var(--muted);white-space:nowrap;}
+  .result .score{font-weight:650;}
+  .bullets{margin:0;padding-left:17px;color:#b9c9e2;font-size:12.7px;line-height:1.45;}
+  .bullets li{margin:4px 0;}
+  .lock{color:var(--win);font-weight:800;}
+  .watch{color:var(--gold);font-weight:800;}
+
+  .scroller{overflow-x:auto;padding:14px 26px 40px;}
+  .bracket{display:flex;gap:30px;min-width:1500px;align-items:stretch;}
+  .round{display:flex;flex-direction:column;justify-content:space-around;flex:1;min-width:228px;}
+  .round h2{font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);
+    text-align:center;margin:0 0 6px;position:sticky;top:0;}
+  .match{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:7px 9px;margin:7px 0;
+    position:relative;box-shadow:0 1px 0 rgba(0,0,0,.3);}
+  .mhead{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);margin-bottom:4px;gap:8px;}
+  .mhead .num{font-weight:700;color:#b9c9e2;}
+  .slot{font-size:10.2px;color:#b9c9e2;background:rgba(39,55,79,.55);border:1px solid rgba(39,55,79,.8);border-radius:7px;padding:1px 6px;margin:0 0 4px;display:inline-block;}
+  .team{display:flex;align-items:center;gap:7px;padding:3px 4px;border-radius:5px;font-size:13.5px;}
+  .team .flag{font-size:15px;width:20px;text-align:center;flex:none;}
+  .team .nm{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .team .seed{font-size:10.5px;color:var(--muted);margin-left:4px;}
+  .team.win .nm{font-weight:700;color:var(--win);}
+  .team.win::after{content:"✓";color:var(--win);font-size:11px;font-weight:700;}
+  .team.lose .nm{color:#9fb0c9;}
+  .match.fra{border-color:var(--fra);background:linear-gradient(180deg,var(--fra-soft),var(--card));}
+  .match.arg{border-color:var(--arg);background:linear-gradient(180deg,var(--arg-soft),var(--card));}
+  .tag{position:absolute;top:-9px;right:8px;font-size:9.5px;font-weight:700;letter-spacing:.4px;
+    background:var(--gold);color:#2a2206;padding:1px 6px;border-radius:8px;}
+  .tag.f{background:var(--fra);color:#fff;} .tag.a{background:var(--arg);color:#06222b;}
+  .final-wrap{display:flex;flex-direction:column;justify-content:center;flex:1;min-width:250px;}
+  .trophy{text-align:center;font-size:30px;margin-bottom:2px;}
+  .champ{margin-top:10px;background:linear-gradient(180deg,#1d2c49,#121c30);border:1px solid var(--gold);
+    border-radius:11px;padding:12px;text-align:center;}
+  .champ .lbl{font-size:11px;text-transform:uppercase;letter-spacing:1.4px;color:var(--gold);}
+  .champ .who{font-size:18px;font-weight:800;margin-top:3px;}
+  .champ .note{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.45;}
+  .third{margin:0 26px 20px;background:var(--panel);border:1px solid var(--line);border-radius:11px;
+    padding:12px 16px;max-width:430px;}
+  .third h3{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
+  footer{color:var(--muted);font-size:11.5px;padding:0 26px 40px;line-height:1.5;max-width:1120px;}
+  .pill{display:inline-block;background:#16223a;border:1px solid var(--line);border-radius:20px;
+    padding:2px 10px;font-size:11px;color:#b9c9e2;margin-right:6px;}
+
+  @media (max-width:760px){
+    header{padding:16px 16px 4px;} h1{font-size:20px;} .sub{font-size:12.5px;} .legend{gap:10px 14px;font-size:11.5px;}
+    .updates{grid-template-columns:1fr;padding:0 14px 8px;} .results{grid-template-columns:1fr;}
+    .scroller{padding:8px 14px 28px;overflow-x:visible;}
+    .bracket{flex-direction:column;min-width:0;gap:6px;}
+    .round{min-width:0;justify-content:flex-start;} .round h2{position:static;text-align:left;margin:18px 0 2px;font-size:12.5px;padding-bottom:5px;border-bottom:1px solid var(--line);}
+    .match{margin:6px 0;padding:8px 11px;} .team{font-size:14.5px;padding:5px 4px;} .mhead{font-size:11px;}
+    .final-wrap{min-width:0;} .champ{margin-top:8px;} .third{margin:4px 14px 30px;max-width:none;} footer{padding:0 14px 36px;} .pill{margin-bottom:6px;display:inline-block;}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🏆 World Cup 2026 — Updated Projected Path to the Final</h1>
+  <div class="sub">Updated through the latest completed results available Tuesday, June 23, 2026 at 10:40 a.m. AST / ET. June 23 Group K/L matches had not kicked off yet, so Portugal–Uzbekistan, England–Ghana, Panama–Croatia and Colombia–DR Congo remain projections. Knockout opponents are still provisional until all group finales are complete June 24–27.</div>
+  <div class="legend">
+    <span><i class="chip fra"></i> France path</span>
+    <span><i class="chip arg"></i> Argentina path</span>
+    <span><i class="chip win"></i> Projected winner ✓</span>
+    <span><i class="chip live"></i> Latest results added</span>
+    <span><i class="chip pending"></i> Provisional seed</span>
+    <span>⭐ marquee match</span>
+  </div>
+</header>
+
+<section class="updates">
+  <div class="box">
+    <h3>Latest completed results added</h3>
+    <div class="results">
+      <div class="result"><span class="score">🇳🇱 Netherlands 5–1 Sweden 🇸🇪</span><span class="date">Jun 20</span></div>
+      <div class="result"><span class="score">🇩🇪 Germany 2–1 Ivory Coast 🇨🇮</span><span class="date">Jun 20</span></div>
+      <div class="result"><span class="score">🇪🇨 Ecuador 0–0 Curaçao 🇨🇼</span><span class="date">Jun 20</span></div>
+      <div class="result"><span class="score">🇯🇵 Japan 4–0 Tunisia 🇹🇳</span><span class="date">Jun 20</span></div>
+      <div class="result"><span class="score">🇪🇸 Spain 4–0 Saudi Arabia 🇸🇦</span><span class="date">Jun 21</span></div>
+      <div class="result"><span class="score">🇧🇪 Belgium 0–0 Iran 🇮🇷</span><span class="date">Jun 21</span></div>
+      <div class="result"><span class="score">🇺🇾 Uruguay 2–2 Cabo Verde 🇨🇻</span><span class="date">Jun 21</span></div>
+      <div class="result"><span class="score">🇳🇿 New Zealand 1–3 Egypt 🇪🇬</span><span class="date">Jun 21</span></div>
+      <div class="result"><span class="score">🇦🇷 Argentina 2–0 Austria 🇦🇹</span><span class="date">Jun 22</span></div>
+      <div class="result"><span class="score">🇫🇷 France 3–0 Iraq 🇮🇶</span><span class="date">Jun 22</span></div>
+      <div class="result"><span class="score">🇳🇴 Norway 3–2 Senegal 🇸🇳</span><span class="date">Jun 22</span></div>
+      <div class="result"><span class="score">🇯🇴 Jordan 1–2 Algeria 🇩🇿</span><span class="date">Jun 22</span></div>
+    </div>
+  </div>
+  <div class="box">
+    <h3>Projection changes vs prior file</h3>
+    <ul class="bullets">
+      <li><span class="lock">Locked:</span> Mexico as 1A, USA as 1D, Germany as 1E, and Argentina as 1J.</li>
+      <li><span class="lock">Through:</span> France and Norway are both projected through from Group I; France still projects as 1I because a draw vs Norway is enough on goal difference.</li>
+      <li><span class="watch">Moved:</span> Egypt's 3–1 win over New Zealand pushes Egypt to projected 1G, with Belgium sliding to projected 2G.</li>
+      <li><span class="watch">Moved:</span> Algeria's win over Jordan puts Algeria into the projected third-place pool, creating a possible Egypt–Algeria R32 and a tougher Argentina–Belgium R16.</li>
+      <li><span class="watch">Still open:</span> Group K and Group L are unchanged because the June 23 matches had not started at update time.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="scroller">
+  <div class="bracket" id="bracket"></div>
+</div>
+
+<div class="third" id="thirdplace"></div>
+
+<footer>
+  <div style="margin-bottom:8px;">
+    <span class="pill">R32: Jun 28 – Jul 3</span>
+    <span class="pill">R16: Jul 4 – 7</span>
+    <span class="pill">QF: Jul 9 – 11</span>
+    <span class="pill">SF: Jul 14 & 15</span>
+    <span class="pill">3rd: Jul 18</span>
+    <span class="pill">Final: Jul 19</span>
+  </div>
+  Match numbers and bracket slots follow the official fixed Round-of-32 structure. Third-place opponents remain provisional: the eight best third-placed teams and FIFA's allocation table will only be final once all group matches are complete. This update keeps your dream <b>France vs Argentina final</b> alive. The major path change is that Egypt now projects to win Group G, moving Belgium into Argentina's Round-of-16 lane if both advance.
+  <br><br>
+  Sources checked for this update: ESPN results/schedule, FOX Sports bracket/scenario tracker, and SB Nation third-place tracker, all current to the morning of June 23, 2026.
+</footer>
+
+<script>
+// round, matchNo, date, teamA{code,name,seed}, teamB, winner: 'A'|'B', tag, path:'fra'|'arg'|null
+const F={ARG:'🇦🇷',FRA:'🇫🇷',BRA:'🇧🇷',ESP:'🇪🇸',GER:'🇩🇪',NED:'🇳🇱',ENG:'🏴',POR:'🇵🇹',
+  BEL:'🇧🇪',MEX:'🇲🇽',USA:'🇺🇸',NOR:'🇳🇴',SUI:'🇨🇭',COL:'🇨🇴',MAR:'🇲🇦',JPN:'🇯🇵',SWE:'🇸🇪',
+  CRO:'🇭🇷',URU:'🇺🇾',SEN:'🇸🇳',KOR:'🇰🇷',TUR:'🇹🇷',SCO:'🏴',ECU:'🇪🇨',CIV:'🇨🇮',
+  AUT:'🇦🇹',CAN:'🇨🇦',EGY:'🇪🇬',BIH:'🇧🇦',CZE:'🇨🇿',GHA:'🇬🇭',AUS:'🇦🇺',IRN:'🇮🇷',
+  CPV:'🇨🇻',COD:'🇨🇩',PAR:'🇵🇾',QAT:'🇶🇦',RSA:'🇿🇦',KSA:'🇸🇦',CUW:'🇨🇼',IRQ:'🇮🇶',ALG:'🇩🇿',JOR:'🇯🇴',PAN:'🇵🇦',NZL:'🇳🇿'};
+
+function T(code,name,seed){return [code,name,seed||''];}
+
+const R32=[
+  {n:73,d:'Sun Jun 28',slot:'2A v 2B',a:T('KOR','South Korea','2A'),b:T('SUI','Switzerland','2B'),w:'B'},
+  {n:74,d:'Mon Jun 29',slot:'1E v proj. 3D',a:T('GER','Germany','1E'),b:T('PAR','Paraguay','3D'),w:'A'},
+  {n:75,d:'Mon Jun 29',slot:'1F v 2C',a:T('NED','Netherlands','1F'),b:T('MAR','Morocco','2C'),w:'A',tag:'⭐'},
+  {n:76,d:'Mon Jun 29',slot:'1C v 2F',a:T('BRA','Brazil','1C'),b:T('JPN','Japan','2F'),w:'A',tag:'⭐'},
+  {n:77,d:'Tue Jun 30',slot:'1I v proj. 3F',a:T('FRA','France','1I'),b:T('SWE','Sweden','3F'),w:'A',path:'fra'},
+  {n:78,d:'Tue Jun 30',slot:'2E v 2I',a:T('CIV','Ivory Coast','2E'),b:T('NOR','Norway','2I'),w:'B'},
+  {n:79,d:'Tue Jun 30',slot:'1A v proj. 3C',a:T('MEX','Mexico','1A'),b:T('SCO','Scotland','3C'),w:'A'},
+  {n:80,d:'Wed Jul 1',slot:'1L v proj. 3K',a:T('ENG','England','1L'),b:T('COD','DR Congo','3K'),w:'A'},
+  {n:81,d:'Wed Jul 1',slot:'1D v proj. 3B',a:T('USA','USA','1D'),b:T('BIH','Bosnia','3B'),w:'A'},
+  {n:82,d:'Wed Jul 1',slot:'1G v proj. 3J',a:T('EGY','Egypt','1G'),b:T('ALG','Algeria','3J'),w:'A',tag:'⭐'},
+  {n:83,d:'Thu Jul 2',slot:'2K v 2L',a:T('POR','Portugal','2K'),b:T('CRO','Croatia','2L'),w:'A',tag:'⭐'},
+  {n:84,d:'Thu Jul 2',slot:'1H v 2J',a:T('ESP','Spain','1H'),b:T('AUT','Austria','2J'),w:'A'},
+  {n:85,d:'Thu Jul 2',slot:'1B v proj. 3G',a:T('CAN','Canada','1B'),b:T('IRN','Iran','3G'),w:'A'},
+  {n:86,d:'Fri Jul 3',slot:'1J v 2H',a:T('ARG','Argentina','1J'),b:T('CPV','Cabo Verde','2H'),w:'A',path:'arg'},
+  {n:87,d:'Fri Jul 3',slot:'1K v proj. 3L',a:T('COL','Colombia','1K'),b:T('GHA','Ghana','3L'),w:'A'},
+  {n:88,d:'Fri Jul 3',slot:'2D v 2G',a:T('AUS','Australia','2D'),b:T('BEL','Belgium','2G'),w:'B',tag:'⭐'},
+];
+// visual order pairs the Round-of-32 matches into their Round-of-16 routes
+const R32order=[74,77,73,75,76,78,79,80,83,84,81,82,86,88,85,87];
+
+const R16=[
+  {n:89,d:'Sat Jul 4',a:T('GER','Germany'),b:T('FRA','France'),w:'B',path:'fra',tag:'⭐⭐'},
+  {n:90,d:'Sat Jul 4',a:T('SUI','Switzerland'),b:T('NED','Netherlands'),w:'B'},
+  {n:91,d:'Sun Jul 5',a:T('BRA','Brazil'),b:T('NOR','Norway'),w:'A'},
+  {n:92,d:'Sun Jul 5',a:T('MEX','Mexico'),b:T('ENG','England'),w:'B',tag:'⭐'},
+  {n:93,d:'Mon Jul 6',a:T('POR','Portugal'),b:T('ESP','Spain'),w:'B',tag:'⭐⭐'},
+  {n:94,d:'Mon Jul 6',a:T('USA','USA'),b:T('EGY','Egypt'),w:'A',tag:'⭐'},
+  {n:95,d:'Tue Jul 7',a:T('ARG','Argentina'),b:T('BEL','Belgium'),w:'A',path:'arg',tag:'⭐⭐'},
+  {n:96,d:'Tue Jul 7',a:T('CAN','Canada'),b:T('COL','Colombia'),w:'B',tag:'⭐'},
+];
+const R16order=[89,90,91,92,93,94,95,96];
+
+const QF=[
+  {n:97,d:'Thu Jul 9',a:T('FRA','France'),b:T('NED','Netherlands'),w:'A',path:'fra',tag:'⭐'},
+  {n:98,d:'Fri Jul 10',a:T('ESP','Spain'),b:T('USA','USA'),w:'A'},
+  {n:99,d:'Sat Jul 11',a:T('BRA','Brazil'),b:T('ENG','England'),w:'A',tag:'⭐⭐'},
+  {n:100,d:'Sat Jul 11',a:T('ARG','Argentina'),b:T('COL','Colombia'),w:'A',path:'arg',tag:'⭐⭐'},
+];
+const SF=[
+  {n:101,d:'Tue Jul 14',a:T('FRA','France'),b:T('ESP','Spain'),w:'A',path:'fra',tag:'⭐⭐⭐'},
+  {n:102,d:'Wed Jul 15',a:T('BRA','Brazil'),b:T('ARG','Argentina'),w:'B',path:'arg',tag:'⭐⭐⭐'},
+];
+const FINAL={n:104,d:'Sun Jul 19',a:T('FRA','France'),b:T('ARG','Argentina'),w:'B',tag:'⭐⭐⭐'};
+const THIRD={n:103,d:'Sat Jul 18',a:T('ESP','Spain'),b:T('BRA','Brazil'),w:'B'};
+
+function teamRow(t,isWin){
+  const cls = isWin ? 'team win' : 'team lose';
+  const seed = t[2] ? `<span class="seed">${t[2]}</span>` : '';
+  return `<div class="${cls}"><span class="flag">${F[t[0]]||''}</span><span class="nm">${t[1]}${seed}</span></div>`;
+}
+function matchCard(m){
+  const pathCls = m.path?(' '+m.path):'';
+  let tag='';
+  if(m.tag){ const tc = m.path==='fra'?' f':(m.path==='arg'?' a':''); tag=`<span class="tag${tc}">${m.tag}</span>`; }
+  const slot = m.slot ? `<div class="slot">${m.slot}</div>` : '';
+  return `<div class="match${pathCls}">${tag}
+    <div class="mhead"><span class="num">M${m.n}</span><span>${m.d}</span></div>
+    ${slot}
+    ${teamRow(m.a, m.w==='A')}
+    ${teamRow(m.b, m.w==='B')}
+  </div>`;
+}
+function roundCol(title, list, order){
+  const items = order ? order.map(n=>list.find(x=>x.n===n)) : list;
+  return `<div class="round"><h2>${title}</h2>${items.map(matchCard).join('')}</div>`;
+}
+
+const bracket = document.getElementById('bracket');
+bracket.innerHTML =
+  roundCol('Round of 32', R32, R32order) +
+  roundCol('Round of 16', R16, R16order) +
+  roundCol('Quarterfinals', QF) +
+  roundCol('Semifinals', SF) +
+  `<div class="final-wrap"><h2 style="text-align:center;font-size:12px;letter-spacing:1.2px;color:var(--muted);text-transform:uppercase;">Final</h2>
+     <div class="trophy">🏆</div>
+     ${matchCard(FINAL)}
+     <div class="champ"><div class="lbl">Projected Champion</div>
+       <div class="who">🇦🇷 Argentina</div>
+       <div class="note">Still a coin-flip rematch of 2022. Argentina are edged ahead here because their group is now locked and the model still likes their knockout profile, but the projected Belgium Round-of-16 makes the path harder than the prior version.</div>
+     </div>
+   </div>`;
+
+document.getElementById('thirdplace').innerHTML =
+  `<h3>Third-Place Playoff</h3>${matchCard(THIRD)}`;
+</script>
+</body>
+</html>
