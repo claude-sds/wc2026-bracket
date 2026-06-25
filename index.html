@@ -7,7 +7,6 @@
 <style>
   :root{
     --bg:#0b1220; --panel:#121c30; --line:#27374f; --ink:#e8eef7; --muted:#8aa0bd;
-    --fra:#2b5fb0; --fra-soft:#16263f; --arg:#56b6d8; --arg-soft:#10303c;
     --win:#9fe6a0; --gold:#e8c45a; --card:#16223a; --danger:#e57b7b;
   }
   *{box-sizing:border-box;}
@@ -19,7 +18,8 @@
   .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:8px 0 10px;}
   .legend span{display:inline-flex;align-items:center;gap:6px;}
   .chip{width:13px;height:13px;border-radius:3px;display:inline-block;}
-  .chip.fra{background:var(--fra);} .chip.arg{background:var(--arg);} .chip.win{background:var(--win);} .chip.live{background:var(--gold);} .chip.pending{background:var(--danger);}
+  .chip.win{background:var(--win);} .chip.live{background:var(--gold);} .chip.pending{background:var(--danger);}
+  .chip.confirmed{background:var(--win);} .chip.partial{background:linear-gradient(90deg,var(--win) 0 48%,var(--gold) 48% 100%);} .chip.projected{background:transparent;border:2px dashed var(--gold);}
 
   .updates{display:grid;grid-template-columns:minmax(280px,1.15fr) minmax(260px,.85fr);gap:14px;padding:0 26px 8px;max-width:1240px;}
   .box{background:rgba(18,28,48,.86);border:1px solid var(--line);border-radius:12px;padding:12px 14px;box-shadow:0 1px 0 rgba(0,0,0,.24);}
@@ -64,6 +64,13 @@
   .mhead{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);margin-bottom:4px;gap:8px;}
   .mhead .num{font-weight:700;color:#b9c9e2;}
   .slot{font-size:10.2px;color:#b9c9e2;background:rgba(39,55,79,.55);border:1px solid rgba(39,55,79,.8);border-radius:7px;padding:1px 6px;margin:0 0 4px;display:inline-block;}
+  .match-status{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:.35px;text-transform:uppercase;vertical-align:1px;}
+  .match.status-confirmed{border-style:solid;box-shadow:0 0 0 1px rgba(159,230,160,.22),0 1px 0 rgba(0,0,0,.3);}
+  .match.status-partial{border-style:solid;box-shadow:inset 3px 0 0 rgba(232,196,90,.85),0 1px 0 rgba(0,0,0,.3);}
+  .match.status-projected{border-style:dashed;}
+  .match-status.confirmed{color:var(--win);background:rgba(159,230,160,.12);border:1px solid rgba(159,230,160,.65);}
+  .match-status.partial{color:var(--gold);background:rgba(232,196,90,.12);border:1px solid rgba(232,196,90,.65);}
+  .match-status.projected{color:#d8c783;background:rgba(232,196,90,.10);border:1px dashed rgba(232,196,90,.72);}
   .team{display:flex;align-items:center;gap:7px;padding:3px 4px;border-radius:5px;font-size:13.5px;}
   .team .flag{font-size:15px;width:20px;text-align:center;flex:none;}
   .team .nm{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -71,11 +78,8 @@
   .team.win .nm{font-weight:700;color:var(--win);}
   .team.win::after{content:"✓";color:var(--win);font-size:11px;font-weight:700;}
   .team.lose .nm{color:#9fb0c9;}
-  .match.fra{border-color:var(--fra);background:linear-gradient(180deg,var(--fra-soft),var(--card));}
-  .match.arg{border-color:var(--arg);background:linear-gradient(180deg,var(--arg-soft),var(--card));}
   .tag{position:absolute;top:-9px;right:8px;font-size:9.5px;font-weight:700;letter-spacing:.4px;
     background:var(--gold);color:#2a2206;padding:1px 6px;border-radius:8px;}
-  .tag.f{background:var(--fra);color:#fff;} .tag.a{background:var(--arg);color:#06222b;}
   .final-wrap{display:flex;flex-direction:column;justify-content:center;flex:1;min-width:250px;}
   .trophy{text-align:center;font-size:30px;margin-bottom:2px;}
   .champ{margin-top:10px;background:linear-gradient(180deg,#1d2c49,#121c30);border:1px solid var(--gold);
@@ -138,9 +142,10 @@
   <h1>🏆 World Cup 2026 — Updated Projected Path to the Final</h1>
   <div class="sub">Updated through the latest completed results available Wednesday, June 24, 2026 at 8:15 p.m. AST / ET. The June 24 Group B and Group C finales are included; the 9 p.m. Group A finales — Czechia–Mexico and South Africa–South Korea — had not started at update time, so they remain provisional. Knockout opponents are still provisional until all group finales are complete June 24–27.</div>
   <div class="legend">
-    <span><i class="chip fra"></i> France path</span>
-    <span><i class="chip arg"></i> Argentina path</span>
     <span><i class="chip win"></i> Projected winner ✓</span>
+    <span><i class="chip confirmed"></i> Confirmed matchup</span>
+    <span><i class="chip partial"></i> Part-confirmed matchup</span>
+    <span><i class="chip projected"></i> Projected matchup</span>
     <span><i class="chip live"></i> Latest results added</span>
     <span><i class="chip pending"></i> Provisional seed</span>
     <span>⭐ marquee match</span>
@@ -185,7 +190,7 @@
   </div>
 </section>
 
-<div class="scroll-hint">Swipe sideways to view: Group Tables → Round of 32 → Round of 16 → Quarterfinals → Semifinals → Final.</div>
+<div class="scroll-hint">Swipe sideways to view: Group Tables → Round of 32 → Round of 16 → Quarterfinals → Semifinals → Final. Match badges show Confirmed / Part-confirmed / Projected.</div>
 <div class="scroller">
   <div class="bracket" id="bracket"></div>
 </div>
@@ -207,7 +212,7 @@
 </footer>
 
 <script>
-// round, matchNo, date, teamA{code,name,seed}, teamB, winner: 'A'|'B', tag, path:'fra'|'arg'|null
+// round, matchNo, date, teamA{code,name,seed}, teamB, winner: 'A'|'B', status:'confirmed'|'partial'|'projected', tag
 const F={ARG:'🇦🇷',FRA:'🇫🇷',BRA:'🇧🇷',ESP:'🇪🇸',GER:'🇩🇪',NED:'🇳🇱',ENG:'🏴',POR:'🇵🇹',
   BEL:'🇧🇪',MEX:'🇲🇽',USA:'🇺🇸',NOR:'🇳🇴',SUI:'🇨🇭',COL:'🇨🇴',MAR:'🇲🇦',JPN:'🇯🇵',SWE:'🇸🇪',
   CRO:'🇭🇷',URU:'🇺🇾',SEN:'🇸🇳',KOR:'🇰🇷',TUR:'🇹🇷',SCO:'🏴',ECU:'🇪🇨',CIV:'🇨🇮',
@@ -246,63 +251,68 @@ const GROUPS=[
 ];
 
 const R32=[
-  {n:73,d:'Sun Jun 28',slot:'2A v 2B',a:T('KOR','South Korea','2A'),b:T('CAN','Canada','2B'),w:'B',tag:'⭐'},
-  {n:74,d:'Mon Jun 29',slot:'1E v proj. 3D',a:T('GER','Germany','1E'),b:T('PAR','Paraguay','3D'),w:'A'},
-  {n:75,d:'Mon Jun 29',slot:'1F v 2C',a:T('NED','Netherlands','1F'),b:T('MAR','Morocco','2C'),w:'A',tag:'⭐'},
-  {n:76,d:'Mon Jun 29',slot:'1C v 2F',a:T('BRA','Brazil','1C'),b:T('JPN','Japan','2F'),w:'A',tag:'⭐'},
-  {n:77,d:'Tue Jun 30',slot:'1I v proj. 3F',a:T('FRA','France','1I'),b:T('SWE','Sweden','3F'),w:'A',path:'fra'},
-  {n:78,d:'Tue Jun 30',slot:'2E v 2I',a:T('CIV','Ivory Coast','2E'),b:T('NOR','Norway','2I'),w:'B'},
-  {n:79,d:'Tue Jun 30',slot:'1A v proj. 3C',a:T('MEX','Mexico','1A'),b:T('SCO','Scotland','3C'),w:'A'},
-  {n:80,d:'Wed Jul 1',slot:'1L v proj. 3K',a:T('ENG','England','1L'),b:T('COD','DR Congo','3K'),w:'A'},
-  {n:81,d:'Wed Jul 1',slot:'1D v proj. 3B',a:T('USA','USA','1D'),b:T('BIH','Bosnia','3B'),w:'A'},
-  {n:82,d:'Wed Jul 1',slot:'1G v proj. 3J',a:T('EGY','Egypt','1G'),b:T('ALG','Algeria','3J'),w:'A',tag:'⭐'},
-  {n:83,d:'Thu Jul 2',slot:'2K v 2L',a:T('POR','Portugal','2K'),b:T('CRO','Croatia','2L'),w:'A',tag:'⭐'},
-  {n:84,d:'Thu Jul 2',slot:'1H v 2J',a:T('ESP','Spain','1H'),b:T('AUT','Austria','2J'),w:'A'},
-  {n:85,d:'Thu Jul 2',slot:'1B v proj. 3G',a:T('SUI','Switzerland','1B'),b:T('IRN','Iran','3G'),w:'A'},
-  {n:86,d:'Fri Jul 3',slot:'1J v 2H',a:T('ARG','Argentina','1J'),b:T('CPV','Cabo Verde','2H'),w:'A',path:'arg'},
-  {n:87,d:'Fri Jul 3',slot:'1K v proj. 3L',a:T('COL','Colombia','1K'),b:T('GHA','Ghana','3L'),w:'A'},
-  {n:88,d:'Fri Jul 3',slot:'2D v 2G',a:T('AUS','Australia','2D'),b:T('BEL','Belgium','2G'),w:'B',tag:'⭐'},
+  {n:73,d:'Sun Jun 28',status:'partial',slot:'2A v 2B',a:T('KOR','South Korea','2A'),b:T('CAN','Canada','2B'),w:'B',tag:'⭐'},
+  {n:74,d:'Mon Jun 29',status:'partial',slot:'1E v proj. 3D',a:T('GER','Germany','1E'),b:T('PAR','Paraguay','3D'),w:'A'},
+  {n:75,d:'Mon Jun 29',status:'partial',slot:'1F v 2C',a:T('NED','Netherlands','1F'),b:T('MAR','Morocco','2C'),w:'A',tag:'⭐'},
+  {n:76,d:'Mon Jun 29',status:'partial',slot:'1C v 2F',a:T('BRA','Brazil','1C'),b:T('JPN','Japan','2F'),w:'A',tag:'⭐'},
+  {n:77,d:'Tue Jun 30',status:'projected',slot:'1I v proj. 3F',a:T('FRA','France','1I'),b:T('SWE','Sweden','3F'),w:'A'},
+  {n:78,d:'Tue Jun 30',status:'projected',slot:'2E v 2I',a:T('CIV','Ivory Coast','2E'),b:T('NOR','Norway','2I'),w:'B'},
+  {n:79,d:'Tue Jun 30',status:'partial',slot:'1A v proj. 3C',a:T('MEX','Mexico','1A'),b:T('SCO','Scotland','3C'),w:'A'},
+  {n:80,d:'Wed Jul 1',status:'projected',slot:'1L v proj. 3K',a:T('ENG','England','1L'),b:T('COD','DR Congo','3K'),w:'A'},
+  {n:81,d:'Wed Jul 1',status:'partial',slot:'1D v proj. 3B',a:T('USA','USA','1D'),b:T('BIH','Bosnia','3B'),w:'A'},
+  {n:82,d:'Wed Jul 1',status:'projected',slot:'1G v proj. 3J',a:T('EGY','Egypt','1G'),b:T('ALG','Algeria','3J'),w:'A',tag:'⭐'},
+  {n:83,d:'Thu Jul 2',status:'projected',slot:'2K v 2L',a:T('POR','Portugal','2K'),b:T('CRO','Croatia','2L'),w:'A',tag:'⭐'},
+  {n:84,d:'Thu Jul 2',status:'projected',slot:'1H v 2J',a:T('ESP','Spain','1H'),b:T('AUT','Austria','2J'),w:'A'},
+  {n:85,d:'Thu Jul 2',status:'partial',slot:'1B v proj. 3G',a:T('SUI','Switzerland','1B'),b:T('IRN','Iran','3G'),w:'A'},
+  {n:86,d:'Fri Jul 3',status:'partial',slot:'1J v 2H',a:T('ARG','Argentina','1J'),b:T('CPV','Cabo Verde','2H'),w:'A'},
+  {n:87,d:'Fri Jul 3',status:'projected',slot:'1K v proj. 3L',a:T('COL','Colombia','1K'),b:T('GHA','Ghana','3L'),w:'A'},
+  {n:88,d:'Fri Jul 3',status:'projected',slot:'2D v 2G',a:T('AUS','Australia','2D'),b:T('BEL','Belgium','2G'),w:'B',tag:'⭐'},
 ];
 // visual order pairs the Round-of-32 matches into their Round-of-16 routes
 const R32order=[74,77,73,75,76,78,79,80,83,84,81,82,86,88,85,87];
 
 const R16=[
-  {n:89,d:'Sat Jul 4',a:T('GER','Germany'),b:T('FRA','France'),w:'B',path:'fra',tag:'⭐⭐'},
-  {n:90,d:'Sat Jul 4',a:T('CAN','Canada'),b:T('NED','Netherlands'),w:'B'},
-  {n:91,d:'Sun Jul 5',a:T('BRA','Brazil'),b:T('NOR','Norway'),w:'A'},
-  {n:92,d:'Sun Jul 5',a:T('MEX','Mexico'),b:T('ENG','England'),w:'B',tag:'⭐'},
-  {n:93,d:'Mon Jul 6',a:T('POR','Portugal'),b:T('ESP','Spain'),w:'B',tag:'⭐⭐'},
-  {n:94,d:'Mon Jul 6',a:T('USA','USA'),b:T('EGY','Egypt'),w:'A',tag:'⭐'},
-  {n:95,d:'Tue Jul 7',a:T('ARG','Argentina'),b:T('BEL','Belgium'),w:'A',path:'arg',tag:'⭐⭐'},
-  {n:96,d:'Tue Jul 7',a:T('SUI','Switzerland'),b:T('COL','Colombia'),w:'B',tag:'⭐'},
+  {n:89,d:'Sat Jul 4',status:'projected',a:T('GER','Germany'),b:T('FRA','France'),w:'B',tag:'⭐⭐'},
+  {n:90,d:'Sat Jul 4',status:'projected',a:T('CAN','Canada'),b:T('NED','Netherlands'),w:'B'},
+  {n:91,d:'Sun Jul 5',status:'projected',a:T('BRA','Brazil'),b:T('NOR','Norway'),w:'A'},
+  {n:92,d:'Sun Jul 5',status:'projected',a:T('MEX','Mexico'),b:T('ENG','England'),w:'B',tag:'⭐'},
+  {n:93,d:'Mon Jul 6',status:'projected',a:T('POR','Portugal'),b:T('ESP','Spain'),w:'B',tag:'⭐⭐'},
+  {n:94,d:'Mon Jul 6',status:'projected',a:T('USA','USA'),b:T('EGY','Egypt'),w:'A',tag:'⭐'},
+  {n:95,d:'Tue Jul 7',status:'projected',a:T('ARG','Argentina'),b:T('BEL','Belgium'),w:'A',tag:'⭐⭐'},
+  {n:96,d:'Tue Jul 7',status:'projected',a:T('SUI','Switzerland'),b:T('COL','Colombia'),w:'B',tag:'⭐'},
 ];
 const R16order=[89,90,91,92,93,94,95,96];
 
 const QF=[
-  {n:97,d:'Thu Jul 9',a:T('FRA','France'),b:T('NED','Netherlands'),w:'A',path:'fra',tag:'⭐'},
-  {n:98,d:'Fri Jul 10',a:T('ESP','Spain'),b:T('USA','USA'),w:'A'},
-  {n:99,d:'Sat Jul 11',a:T('BRA','Brazil'),b:T('ENG','England'),w:'A',tag:'⭐⭐'},
-  {n:100,d:'Sat Jul 11',a:T('ARG','Argentina'),b:T('COL','Colombia'),w:'A',path:'arg',tag:'⭐⭐'},
+  {n:97,d:'Thu Jul 9',status:'projected',a:T('FRA','France'),b:T('NED','Netherlands'),w:'A',tag:'⭐'},
+  {n:98,d:'Fri Jul 10',status:'projected',a:T('ESP','Spain'),b:T('USA','USA'),w:'A'},
+  {n:99,d:'Sat Jul 11',status:'projected',a:T('BRA','Brazil'),b:T('ENG','England'),w:'A',tag:'⭐⭐'},
+  {n:100,d:'Sat Jul 11',status:'projected',a:T('ARG','Argentina'),b:T('COL','Colombia'),w:'A',tag:'⭐⭐'},
 ];
 const SF=[
-  {n:101,d:'Tue Jul 14',a:T('FRA','France'),b:T('ESP','Spain'),w:'A',path:'fra',tag:'⭐⭐⭐'},
-  {n:102,d:'Wed Jul 15',a:T('BRA','Brazil'),b:T('ARG','Argentina'),w:'B',path:'arg',tag:'⭐⭐⭐'},
+  {n:101,d:'Tue Jul 14',status:'projected',a:T('FRA','France'),b:T('ESP','Spain'),w:'A',tag:'⭐⭐⭐'},
+  {n:102,d:'Wed Jul 15',status:'projected',a:T('BRA','Brazil'),b:T('ARG','Argentina'),w:'B',tag:'⭐⭐⭐'},
 ];
-const FINAL={n:104,d:'Sun Jul 19',a:T('FRA','France'),b:T('ARG','Argentina'),w:'B',tag:'⭐⭐⭐'};
-const THIRD={n:103,d:'Sat Jul 18',a:T('ESP','Spain'),b:T('BRA','Brazil'),w:'B'};
+const FINAL={n:104,d:'Sun Jul 19',status:'projected',a:T('FRA','France'),b:T('ARG','Argentina'),w:'B',tag:'⭐⭐⭐'};
+const THIRD={n:103,d:'Sat Jul 18',status:'projected',a:T('ESP','Spain'),b:T('BRA','Brazil'),w:'B'};
 
 function teamRow(t,isWin){
   const cls = isWin ? 'team win' : 'team lose';
   const seed = t[2] ? `<span class="seed">${t[2]}</span>` : '';
   return `<div class="${cls}"><span class="flag">${F[t[0]]||''}</span><span class="nm">${t[1]}${seed}</span></div>`;
 }
+function matchStatus(m){
+  const status = m.status || 'projected';
+  const labels = {confirmed:'Confirmed', partial:'Part-confirmed', projected:'Projected'};
+  return {status, label:labels[status] || 'Projected'};
+}
 function matchCard(m){
-  const pathCls = m.path?(' '+m.path):'';
+  const ms = matchStatus(m);
   let tag='';
-  if(m.tag){ const tc = m.path==='fra'?' f':(m.path==='arg'?' a':''); tag=`<span class="tag${tc}">${m.tag}</span>`; }
+  if(m.tag){ tag=`<span class="tag">${m.tag}</span>`; }
   const slot = m.slot ? `<div class="slot">${m.slot}</div>` : '';
-  return `<div class="match${pathCls}">${tag}
-    <div class="mhead"><span class="num">M${m.n}</span><span>${m.d}</span></div>
+  return `<div class="match status-${ms.status}">${tag}
+    <div class="mhead"><span><span class="num">M${m.n}</span><span class="match-status ${ms.status}">${ms.label}</span></span><span>${m.d}</span></div>
     ${slot}
     ${teamRow(m.a, m.w==='A')}
     ${teamRow(m.b, m.w==='B')}
@@ -327,7 +337,7 @@ function groupCard(group){
 }
 function groupTablesPanel(){
   return `<div class="tables-panel"><h2>Group Tables</h2>
-    <div class="tables-note">Current standings after completed matches. The bracket to the right still uses projected final group seeds where groups are not settled.</div>
+    <div class="tables-note">Current standings after completed matches. Matchup badges show whether the bracket card is fully confirmed, partly confirmed, or projected.</div>
     <div class="groups-grid">${GROUPS.map(groupCard).join('')}</div>
   </div>`;
 }
