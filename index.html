@@ -140,7 +140,7 @@
 <body>
 <header>
   <h1>🏆 World Cup 2026 — Updated Projected Path to the Final</h1>
-  <div class="sub">Updated through the latest completed results available Wednesday, June 24, 2026 at 8:15 p.m. AST / ET. The June 24 Group B and Group C finales are included; the 9 p.m. Group A finales — Czechia–Mexico and South Africa–South Korea — had not started at update time, so they remain provisional. Knockout opponents are still provisional until all group finales are complete June 24–27.</div>
+  <div class="sub">Updated through the latest completed results available Thursday, June 25, 2026 at 12:35 p.m. AST / ET. Group A is now final: Mexico beat Czechia 3–0 and South Africa beat South Korea 1–0. The June 25 Group D, E and F finales have not kicked off yet, so those groups remain provisional. Knockout opponents are still provisional until all group finales are complete June 24–27.</div>
   <div class="legend">
     <span><i class="chip win"></i> Projected winner ✓</span>
     <span><i class="chip confirmed"></i> Confirmed matchup</span>
@@ -176,16 +176,18 @@
       <div class="result"><span class="score">🇧🇦 Bosnia 3–1 Qatar 🇶🇦</span><span class="date">Jun 24</span></div>
       <div class="result"><span class="score">🇲🇦 Morocco 3–2 Haiti 🇭🇹</span><span class="date">Jun 24</span></div>
       <div class="result"><span class="score">🇧🇷 Brazil 3–0 Scotland 🏴</span><span class="date">Jun 24</span></div>
+      <div class="result"><span class="score">🇲🇽 Mexico 3–0 Czechia 🇨🇿</span><span class="date">Jun 24</span></div>
+      <div class="result"><span class="score">🇿🇦 South Africa 1–0 South Korea 🇰🇷</span><span class="date">Jun 24</span></div>
     </div>
   </div>
   <div class="box">
     <h3>Projection changes vs prior file</h3>
     <ul class="bullets">
-      <li><span class="lock">New locks:</span> Switzerland win Group B, Canada finish 2B, Brazil win Group C and Morocco finish 2C.</li>
-      <li><span class="lock">Also locked/through:</span> Mexico, USA, Germany and Argentina remain locked group winners; France and Norway are through from Group I; Colombia are through from Group K.</li>
-      <li><span class="watch">Path change:</span> Canada now moves into the 2B Round-of-32 slot vs the Group A runner-up; Switzerland moves to the 1B slot vs a projected third-place team.</li>
-      <li><span class="watch">Path change:</span> Bosnia's 3–1 win keeps them alive as a strong projected third-place qualifier, so USA–Bosnia remains the live Round-of-32 projection.</li>
-      <li><span class="watch">Still open:</span> Group A's late June 24 games and the remaining Groups D–L finales can still move several third-place allocations.</li>
+      <li><span class="lock">New locks:</span> Group A is final: Mexico 1A, South Africa 2A, South Korea 3A, Czechia eliminated.</li>
+      <li><span class="lock">First fully confirmed R32 card:</span> South Africa vs Canada is now locked as Match 73.</li>
+      <li><span class="watch">Path change:</span> South Korea moves into the projected third-place pool; Scotland drops out of the current bracket projection.</li>
+      <li><span class="watch">Path change:</span> Mexico's projected opponent shifts from Scotland to Sweden because Mexico can only draw a third-place team from Groups C/E/F/H/I.</li>
+      <li><span class="watch">Still open:</span> Groups D, E and F finish later June 25, so third-place allocation can still move several Round-of-32 opponents.</li>
     </ul>
   </div>
 </section>
@@ -206,9 +208,9 @@
     <span class="pill">3rd: Jul 18</span>
     <span class="pill">Final: Jul 19</span>
   </div>
-  Match numbers and bracket slots follow the official fixed Round-of-32 structure. Third-place opponents remain provisional: the eight best third-placed teams and FIFA's allocation table will only be final once all group matches are complete. This update keeps your dream <b>France vs Argentina final</b> alive. The main path changes are caused by Switzerland overtaking Canada for 1B, Brazil and Morocco locking Group C, and Colombia/Portugal/Ghana/Croatia reshaping the Group K/L projection.
+  Match numbers and bracket slots follow the official fixed Round-of-32 structure. Third-place opponents remain provisional: the eight best third-placed teams and FIFA's allocation table will only be final once all group matches are complete. This update keeps your dream <b>France vs Argentina final</b> alive. The main path changes are caused by Group A becoming final, South Africa locking 2A vs Canada, and South Korea moving into the projected third-place pool.
   <br><br>
-  Sources checked for this update: ESPN results/schedule, Reuters match reports, SB Nation bracket/qualification tracker, and Guardian live report, all current through the completed Brazil–Scotland and Morocco–Haiti matches on June 24, 2026. Group A's 9 p.m. ET matches were still pending at update time.
+  Sources checked for this update: Reuters match reports, FIFA standings, ESPN results/schedule, SB Nation bracket/qualification tracker, and Guardian/DK Network live previews, all current through the completed Group A finales on June 24, 2026. The June 25 Group D/E/F finales had not kicked off at update time.
 </footer>
 
 <script>
@@ -224,8 +226,8 @@ function T(code,name,seed){return [code,name,seed||''];}
 
 
 const GROUPS=[
-  {g:'A',note:'Mexico locked 1A; final pending',rows:[
-    ['MEX','Mexico',2,2,0,0,3,0,3,6,'q'],['KOR','South Korea',2,1,0,1,2,2,0,3,'possible'],['CZE','Czechia',2,0,1,1,2,3,-1,1,'possible'],['RSA','South Africa',2,0,1,1,1,3,-2,1,'possible']]},
+  {g:'A',note:'Final: MEX 1A, RSA 2A',rows:[
+    ['MEX','Mexico',3,3,0,0,6,0,6,9,'q'],['RSA','South Africa',3,1,1,1,2,3,-1,4,'q'],['KOR','South Korea',3,1,0,2,2,3,-1,3,'possible'],['CZE','Czechia',3,0,1,2,2,6,-4,1,'elim']]},
   {g:'B',note:'Final: SUI 1B, CAN 2B',rows:[
     ['SUI','Switzerland',3,2,1,0,7,3,4,7,'q'],['CAN','Canada',3,1,1,1,8,3,5,4,'q'],['BIH','Bosnia',3,1,1,1,5,6,-1,4,'possible'],['QAT','Qatar',3,0,1,2,2,10,-8,1,'elim']]},
   {g:'C',note:'Final: BRA 1C, MAR 2C',rows:[
@@ -251,19 +253,19 @@ const GROUPS=[
 ];
 
 const R32=[
-  {n:73,d:'Sun Jun 28',status:'partial',slot:'2A v 2B',a:T('KOR','South Korea','2A'),b:T('CAN','Canada','2B'),w:'B',tag:'⭐'},
+  {n:73,d:'Sun Jun 28',status:'confirmed',slot:'2A v 2B',a:T('RSA','South Africa','2A'),b:T('CAN','Canada','2B'),w:'B',tag:'⭐'},
   {n:74,d:'Mon Jun 29',status:'partial',slot:'1E v proj. 3D',a:T('GER','Germany','1E'),b:T('PAR','Paraguay','3D'),w:'A'},
   {n:75,d:'Mon Jun 29',status:'partial',slot:'1F v 2C',a:T('NED','Netherlands','1F'),b:T('MAR','Morocco','2C'),w:'A',tag:'⭐'},
   {n:76,d:'Mon Jun 29',status:'partial',slot:'1C v 2F',a:T('BRA','Brazil','1C'),b:T('JPN','Japan','2F'),w:'A',tag:'⭐'},
-  {n:77,d:'Tue Jun 30',status:'projected',slot:'1I v proj. 3F',a:T('FRA','France','1I'),b:T('SWE','Sweden','3F'),w:'A'},
+  {n:77,d:'Tue Jun 30',status:'projected',slot:'proj. 1I v proj. 3G',a:T('FRA','France','1I'),b:T('IRN','Iran','3G'),w:'A'},
   {n:78,d:'Tue Jun 30',status:'projected',slot:'2E v 2I',a:T('CIV','Ivory Coast','2E'),b:T('NOR','Norway','2I'),w:'B'},
-  {n:79,d:'Tue Jun 30',status:'partial',slot:'1A v proj. 3C',a:T('MEX','Mexico','1A'),b:T('SCO','Scotland','3C'),w:'A'},
+  {n:79,d:'Tue Jun 30',status:'partial',slot:'1A v proj. 3F',a:T('MEX','Mexico','1A'),b:T('SWE','Sweden','3F'),w:'A',tag:'⭐'},
   {n:80,d:'Wed Jul 1',status:'projected',slot:'1L v proj. 3K',a:T('ENG','England','1L'),b:T('COD','DR Congo','3K'),w:'A'},
   {n:81,d:'Wed Jul 1',status:'partial',slot:'1D v proj. 3B',a:T('USA','USA','1D'),b:T('BIH','Bosnia','3B'),w:'A'},
-  {n:82,d:'Wed Jul 1',status:'projected',slot:'1G v proj. 3J',a:T('EGY','Egypt','1G'),b:T('ALG','Algeria','3J'),w:'A',tag:'⭐'},
+  {n:82,d:'Wed Jul 1',status:'partial',slot:'proj. 1G v 3A',a:T('EGY','Egypt','1G'),b:T('KOR','South Korea','3A'),w:'A',tag:'⭐'},
   {n:83,d:'Thu Jul 2',status:'projected',slot:'2K v 2L',a:T('POR','Portugal','2K'),b:T('CRO','Croatia','2L'),w:'A',tag:'⭐'},
   {n:84,d:'Thu Jul 2',status:'projected',slot:'1H v 2J',a:T('ESP','Spain','1H'),b:T('AUT','Austria','2J'),w:'A'},
-  {n:85,d:'Thu Jul 2',status:'partial',slot:'1B v proj. 3G',a:T('SUI','Switzerland','1B'),b:T('IRN','Iran','3G'),w:'A'},
+  {n:85,d:'Thu Jul 2',status:'partial',slot:'1B v proj. 3J',a:T('SUI','Switzerland','1B'),b:T('ALG','Algeria','3J'),w:'A'},
   {n:86,d:'Fri Jul 3',status:'partial',slot:'1J v 2H',a:T('ARG','Argentina','1J'),b:T('CPV','Cabo Verde','2H'),w:'A'},
   {n:87,d:'Fri Jul 3',status:'projected',slot:'1K v proj. 3L',a:T('COL','Colombia','1K'),b:T('GHA','Ghana','3L'),w:'A'},
   {n:88,d:'Fri Jul 3',status:'projected',slot:'2D v 2G',a:T('AUS','Australia','2D'),b:T('BEL','Belgium','2G'),w:'B',tag:'⭐'},
@@ -359,7 +361,7 @@ bracket.innerHTML =
      ${matchCard(FINAL)}
      <div class="champ"><div class="lbl">Projected Champion</div>
        <div class="who">🇦🇷 Argentina</div>
-       <div class="note">Still a coin-flip rematch of 2022. Argentina are edged ahead because their group is locked and the model still likes their knockout profile. The projected Belgium Round-of-16 remains the danger spot, while the Switzerland/Canada shuffle mostly affects Colombia's side of the lower bracket.</div>
+       <div class="note">Still a coin-flip rematch of 2022. Argentina are edged ahead because their group is locked and the model still likes their knockout profile. The projected Belgium Round-of-16 remains the danger spot, while South Africa locking 2A mainly affects Canada's opening knockout card.</div>
      </div>
    </div>`;
 
